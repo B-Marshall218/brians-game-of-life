@@ -98,6 +98,35 @@ class Main extends React.Component {
 
   }
 
+  playButton = () => {
+    clearInterval(this.intervalId)
+    this.intervalId = setInterval(this.play, this.speed);
+  }
+
+  pauseButton = () => {
+    clearInterval(this.intervalId)
+  }
+
+  play = () => {
+    // Check what grid is currently like 
+    let g = this.state.gridFull;
+    // Change grid on the clone 
+    let g2 = arrayClone(this.state.gridFull)
+
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.colums; j++) {
+        let count = 0;
+        if (i > 0) if (g[i - 1][j]) count++; // im struggling understanding why [i - 1] and then add 1 in count
+        if (j > 0) if (g[j - 1][i]) count++
+
+        // if there are less than 2 neighbors or more than 3 the cell dies
+        if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false
+        // If the cell is dead, but gets 3 neighbors, it is born 
+        if (!g[i][j] && count === 3) g2[i][j] = true
+      }
+    }
+  }
+
   componentDidMount() {
     this.seed();
   }
