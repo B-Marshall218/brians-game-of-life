@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { ButtonToolbar, MenuItem, DropdownButton } from 'react-bootstrap';
+import { Button, ButtonToolbar, Dropdown, DropdownButton } from 'react-bootstrap';
 
 class Box extends React.Component {
   selectBox = () => {
@@ -30,7 +30,7 @@ class Grid extends React.Component {
     for (var i = 0; i < this.props.rows; i++) {
       for (var j = 0; j < this.props.cols; j++) {
         // creates the box id to go with each box
-        let boxId = i + "" + j;
+        let boxId = i + " " + j;
 
         // Checking to see if the box is on or off 
         boxClass = this.props.gridFull[i][j] ? "box on" : "box off"
@@ -55,6 +55,48 @@ class Grid extends React.Component {
   }
 }
 
+class Buttons extends React.Component {
+
+  handleSelect = (evt) => {
+    this.props.gridSize(evt)
+  }
+
+  render() {
+    return (
+      <div className="center">
+        <ButtonToolbar>
+          <Button variant="outline-success" className="btn-btn-default" onClick={this.props.playButton}>
+            Play
+          </Button>
+          <Button variant="outline-success" className="btn-btn-default" onClick={this.props.pauseButton}>
+            Pause
+          </Button>
+          <Button variant="outline-success" className="btn-btn-default" onClick={this.props.clear}>
+            Clear
+          </Button>
+          <Button variant="outline-success" className="btn-btn-default" onClick={this.props.slow}>
+            Slow
+          </Button>
+          <Button variant="outline-success" className="btn-btn-default" onClick={this.props.fast}>
+            Fast
+          </Button>
+          <Button variant="outline-success" className="btn-btn-default" onClick={this.props.seed}>
+            Seed
+          </Button>
+          <DropdownButton
+            variant="outline-success"
+            title="Grid Size"
+            id="size-menu"
+            onSelect={this.handleSelect}>
+            <Dropdown.Item eventKey="1">20x10</Dropdown.Item>
+            <Dropdown.Item eventKey="1">50x30</Dropdown.Item>
+            <Dropdown.Item eventKey="1">70x50</Dropdown.Item>
+          </DropdownButton>
+        </ButtonToolbar>
+      </div>
+    )
+  }
+}
 
 class Main extends React.Component {
   constructor() {
@@ -63,7 +105,7 @@ class Main extends React.Component {
     this.rows = 30
     this.cols = 50
     this.state = {
-      genertation: 0,
+      generatation: 0,
       // This creates your two demential array and makes the grid blank 
       gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
     }
@@ -114,10 +156,16 @@ class Main extends React.Component {
     let g2 = arrayClone(this.state.gridFull)
 
     for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.colums; j++) {
+      for (let j = 0; j < this.cols; j++) {
         let count = 0;
         if (i > 0) if (g[i - 1][j]) count++; // im struggling understanding why [i - 1] and then add 1 in count
-        if (j > 0) if (g[j - 1][i]) count++
+        if (j > 0) if (g[i][j - 1]) count++;
+        if (i > 0 && j > 0) if (g[i - 1][j - 1]) count++;
+        if (i > 0 && j < this.cols - 1) if (g[i - 1][j - 1]) count++;
+        if (i < this.rows - 1) if (g[i + 1][j]) count++
+        if (j < this.cols - 1) if (g[i][j + 1]) count++;
+        if (i < this.rows - 1 && j > 0) if (g[i + 1][j - 1]) count++;
+        if (i < this.rows - 1 && this.cols - 1) if (g[i + 1][j + 1]) count++;
 
         // if there are less than 2 neighbors or more than 3 the cell dies
         if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false
@@ -125,10 +173,15 @@ class Main extends React.Component {
         if (!g[i][j] && count === 3) g2[i][j] = true
       }
     }
+    this.setState({
+      gridFull: g2,
+      generation: this.state.generation + 1
+    })
   }
 
   componentDidMount() {
     this.seed();
+    this.playButton();
   }
 
   render() {
@@ -136,6 +189,15 @@ class Main extends React.Component {
       <div>
         <h1>Brian's Game of Life</h1>
         {/* passing in grids props */}
+        <Buttons
+          playButton={this.playButton}
+          pauseButton={this.pauseButton}
+          slow={this.slow}
+          fast={this.fast}
+          clear={this.clear}
+          seed={this.seed}
+          gridsize={this.gridSize}
+        />
         <Grid
           gridFull={this.state.gridFull}
           rows={this.rows}
