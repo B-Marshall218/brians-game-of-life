@@ -19,16 +19,25 @@ class Box extends React.Component {
   }
 }
 
+// forLoop = () => {
+//   for (let i = 0; i < this.props.rows; i++) {
+//     for (let j = 0; j < this.props.cols; j++) {
+
+//     }
+//   }
+// }
+
 class Grid extends React.Component {
   render() {
     // *16 bc theres 16 pixels 
-    const width = (this.props.cols * 16);
+    const width = (this.props.cols * 14);
     var rowsArr = [];
 
     var boxClass = "";
+
     // Nested for loop to send data to array 
-    for (var i = 0; i < this.props.rows; i++) {
-      for (var j = 0; j < this.props.cols; j++) {
+    for (let i = 0; i < this.props.rows; i++) {
+      for (let j = 0; j < this.props.cols; j++) {
         // creates the box id to go with each box
         let boxId = i + " " + j;
 
@@ -89,8 +98,8 @@ class Buttons extends React.Component {
             id="size-menu"
             onSelect={this.handleSelect}>
             <Dropdown.Item eventKey="1">20x10</Dropdown.Item>
-            <Dropdown.Item eventKey="1">50x30</Dropdown.Item>
-            <Dropdown.Item eventKey="1">70x50</Dropdown.Item>
+            <Dropdown.Item eventKey="2">50x30</Dropdown.Item>
+            <Dropdown.Item eventKey="3">70x50</Dropdown.Item>
           </DropdownButton>
         </ButtonToolbar>
       </div>
@@ -105,7 +114,7 @@ class Main extends React.Component {
     this.rows = 30
     this.cols = 50
     this.state = {
-      generatation: 0,
+      generation: 0,
       // This creates your two demential array and makes the grid blank 
       gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
     }
@@ -135,7 +144,8 @@ class Main extends React.Component {
       }
     }
     this.setState({
-      gridFull: gridCopy
+      gridFull: gridCopy,
+      generation: this.state.generation + 1
     })
 
   }
@@ -145,8 +155,46 @@ class Main extends React.Component {
     this.intervalId = setInterval(this.play, this.speed);
   }
 
+  slow = () => {
+    this.speed = 1000;
+    this.playButton();
+  }
+
+  fast = () => {
+    this.speed = 100;
+    this.playButton();
+  }
   pauseButton = () => {
     clearInterval(this.intervalId)
+  }
+  grid = () => {
+    Array(this.rows).fill().map(() => Array(this.cols).fill(false))
+  }
+  //Try and refactor this into a grid function 
+  clear = () => {
+    this.grid();
+    this.setState({
+      gridFull: this.grid,
+      generation: 0
+    })
+  }
+
+  gridSize = (size) => {
+    switch (size) {
+      case "1":
+        this.cols = 20;
+        this.rows = 10;
+        break;
+      case "2":
+        this.cols = 50;
+        this.rows = 30;
+        break;
+      default:
+        this.cols = 70;
+        this.rows = 50;
+
+    }
+    this.clear();
   }
 
   play = () => {
@@ -165,7 +213,7 @@ class Main extends React.Component {
         if (i < this.rows - 1) if (g[i + 1][j]) count++
         if (j < this.cols - 1) if (g[i][j + 1]) count++;
         if (i < this.rows - 1 && j > 0) if (g[i + 1][j - 1]) count++;
-        if (i < this.rows - 1 && this.cols - 1) if (g[i + 1][j + 1]) count++;
+        if (i < this.rows - 1 && j < this.cols - 1) if (g[i + 1][j + 1]) count++;
 
         // if there are less than 2 neighbors or more than 3 the cell dies
         if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false
@@ -196,7 +244,7 @@ class Main extends React.Component {
           fast={this.fast}
           clear={this.clear}
           seed={this.seed}
-          gridsize={this.gridSize}
+          gridSize={this.gridSize}
         />
         <Grid
           gridFull={this.state.gridFull}
