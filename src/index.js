@@ -120,6 +120,8 @@ class Main extends React.Component {
     }
   }
 
+
+
   selectBox = (row, col) => {
     // cant update state directly, make a copy array update copy array then 
     // push to original array
@@ -234,8 +236,22 @@ class Main extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Brian's Game of Life</h1>
+      <div className="container">
+        <h1 className="gameTitle">Brian's Game of Life</h1>
+        <div className="rulesContainer">
+          <h4 className="rulesHeading">Rules of the Game</h4>
+          <p className="rules"> 1. If the cell is alive and has 2 or 3 neighbors, then it remains alive. Else it dies.
+          2. If the cell is dead and has exactly 3 neighbors, then it comes to life. Else if remains dead</p>
+        </div>
+        <div className="historyContainer">
+          <h4 className="historyHeading">What is the Game of Life?</h4>
+          <p className="history">The Game of Life, also known simply as Life,
+          is a cellular automaton devised by the British mathematician
+          John Horton Conway in 1970.[1] It is a zero-player game,
+          meaning that its evolution is determined by its initial state,
+          requiring no further input. One interacts with the Game of Life
+          by creating an initial configuration and observing how it evolves.</p>
+        </div>
         {/* passing in grids props */}
         <Buttons
           playButton={this.playButton}
@@ -253,7 +269,9 @@ class Main extends React.Component {
           selectBox={this.selectBox}
         />
         <h2>Generations: {this.state.generation} </h2>
-      </div>
+
+      </div >
+
     )
   }
 }
