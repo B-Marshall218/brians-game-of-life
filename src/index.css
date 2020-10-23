@@ -1,5 +1,11 @@
 body {
-  background-color: rgb(27, 26, 26)
+  background-color: rgb(27, 26, 26);
+  /* border: 4px solid yellow; */
+  display: flex;
+  justify-content: center
+  /* max-height: 100vh; */
+  /* max-width: 100vh; */
+  /* check body settings for width and height*/
 }
 
 .box {
@@ -41,7 +47,7 @@ h1, h2, h3, h4 {
   color: white;
   margin: auto;
   text-align: center;
-  width: 50%;
+  /* width: 50%; */
   margin-top: 10px;
 }
 
@@ -50,36 +56,46 @@ h4 {
 }
 
 .container {
-  border: 2px solid white;
-  width: auto;
+  /* border: 2px solid paleturquoise; */
+  width: 80em;
   height: 100%;
-  /* display: flex;
-  align-content: center; */
+  margin: 1px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 4em;
+}
+
+.textContainer {
+  /* border: 2px solid yellow; */
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
 }
 
 .gameTitle {
-  border: 2px solid white;
-  margin-bottom: 3em;
+  /* border: 2px solid white; */
+  /* margin-bottom: 3em; */
   display: flex;
   justify-content: center;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: green;
+  ;
 }
 
 .rulesContainer {
   border: 4px solid white;
-  ;
   display: flex;
   justify-content: center;
   flex-direction: column;
   width: 16em;
   padding: 1em;
-  margin: 1em 1em -22em -5em;
-  /* height: -2em; */
 }
 
 .rulesHeading {
-  color: green
-  /* display: flex; */
-  /* margin-left: 2em */
+  color: green;
+  -webkit-text-stroke-width: .5px;
+  -webkit-text-stroke-color: white;
 }
 
 .rules {
@@ -90,15 +106,23 @@ h4 {
 .historyContainer {
   border: 4px solid white;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   flex-direction: column;
   width: 16em;
   padding: 1em;
-  margin-left: 58em;
+}
+
+.gridContainer {
+  /* border: 2px solid purple; */
+  /* margin-right: -16em; */
+  /* width: 45em; */
 }
 
 .historyHeading {
   color: green;
+  -webkit-text-stroke-width: .5px;
+  -webkit-text-stroke-color: white;
+  ;
 }
 
 .history {

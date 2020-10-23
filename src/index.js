@@ -169,14 +169,16 @@ class Main extends React.Component {
   pauseButton = () => {
     clearInterval(this.intervalId)
   }
-  grid = () => {
-    Array(this.rows).fill().map(() => Array(this.cols).fill(false))
-  }
+  // grid = () => {
+  //   Array(this.rows).fill().map(() => Array(this.cols).fill(false))
+  // }
   //Try and refactor this into a grid function 
   clear = () => {
-    this.grid();
+    let grid = Array(this.rows).fill().map(() => Array(this.cols).fill(false))
+
+    console.log(this.state)
     this.setState({
-      gridFull: this.grid,
+      gridFull: grid,
       generation: 0
     })
   }
@@ -236,41 +238,47 @@ class Main extends React.Component {
 
   render() {
     return (
+
       <div className="container">
-        <h1 className="gameTitle">Brian's Game of Life</h1>
-        <div className="rulesContainer">
-          <h4 className="rulesHeading">Rules of the Game</h4>
-          <p className="rules"> 1. If the cell is alive and has 2 or 3 neighbors, then it remains alive. Else it dies.
+        <div className="textContainer">
+          <div className="rulesContainer">
+            <h4 className="rulesHeading">Rules of the Game</h4>
+            <p className="rules"> 1. If the cell is alive and has 2 or 3 neighbors, then it remains alive. Else it dies.
           2. If the cell is dead and has exactly 3 neighbors, then it comes to life. Else if remains dead</p>
-        </div>
-        <div className="historyContainer">
-          <h4 className="historyHeading">What is the Game of Life?</h4>
-          <p className="history">The Game of Life, also known simply as Life,
-          is a cellular automaton devised by the British mathematician
-          John Horton Conway in 1970.[1] It is a zero-player game,
-          meaning that its evolution is determined by its initial state,
-          requiring no further input. One interacts with the Game of Life
+          </div>
+          <div className="historyContainer">
+            <h4 className="historyHeading">What is the Game of Life?</h4>
+            <p className="history">The Game of Life, also known simply as Life,
+            is a cellular automaton devised by the British mathematician
+            John Horton Conway in 1970.[1] It is a zero-player game,
+            meaning that its evolution is determined by its initial state,
+            requiring no further input. One interacts with the Game of Life
           by creating an initial configuration and observing how it evolves.</p>
+          </div>
         </div>
         {/* passing in grids props */}
-        <Buttons
-          playButton={this.playButton}
-          pauseButton={this.pauseButton}
-          slow={this.slow}
-          fast={this.fast}
-          clear={this.clear}
-          seed={this.seed}
-          gridSize={this.gridSize}
-        />
-        <Grid
-          gridFull={this.state.gridFull}
-          rows={this.rows}
-          cols={this.cols}
-          selectBox={this.selectBox}
-        />
-        <h2>Generations: {this.state.generation} </h2>
+        <div className="gridContainer">
+          <h1 className="gameTitle">Brian's Game of Life</h1>
 
-      </div >
+          <Buttons
+            playButton={this.playButton}
+            pauseButton={this.pauseButton}
+            slow={this.slow}
+            fast={this.fast}
+            clear={this.clear}
+            seed={this.seed}
+            gridSize={this.gridSize}
+          />
+          <Grid
+            gridFull={this.state.gridFull}
+            rows={this.rows}
+            cols={this.cols}
+            selectBox={this.selectBox}
+          />
+          <h2>Generations: {this.state.generation} </h2>
+        </div>
+      </div>
+
 
     )
   }
