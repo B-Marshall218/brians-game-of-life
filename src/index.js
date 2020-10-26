@@ -35,6 +35,8 @@ class Grid extends React.Component {
 
     var boxClass = "";
 
+
+
     // Nested for loop to send data to array 
     for (let i = 0; i < this.props.rows; i++) {
       for (let j = 0; j < this.props.cols; j++) {
@@ -94,6 +96,16 @@ class Buttons extends React.Component {
           </Button>
           <DropdownButton
             variant="outline-success"
+            title="Patterns"
+            id="shapes"
+            onSelect={this.pattern}>
+            <Dropdown.Item onClick={this.props.glider}>Glider</Dropdown.Item>
+            <Dropdown.Item onClick={this.props.pulsar}>Pulsar</Dropdown.Item>
+            <Dropdown.Item onClick={this.props.letter}>Letter</Dropdown.Item>
+
+          </DropdownButton>
+          <DropdownButton
+            variant="outline-success"
             title="Grid Size"
             id="size-menu"
             onSelect={this.handleSelect}>
@@ -115,11 +127,13 @@ class Main extends React.Component {
     this.cols = 50
     this.state = {
       generation: 0,
+      // start: false,
       // This creates your two demential array and makes the grid blank 
-      gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
-    }
-  }
+      gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false)),
 
+    }
+    console.log("this beginning")
+  }
 
 
   selectBox = (row, col) => {
@@ -127,6 +141,7 @@ class Main extends React.Component {
     // push to original array
     let gridCopy = arrayClone(this.state.gridFull);
     gridCopy[row][col] = !gridCopy[row][col];
+    console.log(row, col)
     this.setState({
       gridFull: gridCopy
     })
@@ -134,6 +149,7 @@ class Main extends React.Component {
 
   seed = () => {
     console.log("SEED")
+
     let gridCopy = arrayClone(this.state.gridFull);
     // need to go through every square of the grid to decide if its on or off
     for (let i = 0; i < this.rows; i++) {
@@ -150,6 +166,106 @@ class Main extends React.Component {
       generation: this.state.generation + 1
     })
 
+  }
+
+  letter = () => {
+    let grid = Array(this.rows).fill().map(() => Array(this.cols).fill(false))
+    grid[3][6] = "box on";
+    grid[4][6] = "box on";
+    grid[5][6] = "box on";
+    grid[6][6] = "box on";
+    grid[7][6] = "box on";
+    grid[8][6] = "box on";
+    grid[9][6] = "box on";
+    grid[9][7] = "box on";
+    grid[9][8] = "box on";
+    grid[9][9] = "box on";
+    grid[9][10] = "box on";
+    grid[6][7] = "box on";
+    grid[6][8] = "box on";
+    grid[6][9] = "box on";
+    grid[3][7] = "box on";
+    grid[3][8] = "box on";
+    grid[3][9] = "box on";
+    grid[3][10] = "box on";
+
+    this.setState({
+      gridFull: grid,
+      generation: 0
+    })
+  }
+
+  glider = () => {
+    let grid = Array(this.rows).fill().map(() => Array(this.cols).fill(false))
+    grid[2][4] = "box on";
+    grid[3][2] = "box on";
+    grid[3][4] = "box on";
+    grid[4][3] = "box on";
+    grid[4][4] = "box on";
+
+    this.setState({
+      gridFull: grid,
+      generation: 0
+    })
+  }
+  pulsar = () => {
+    let grid = Array(this.rows).fill().map(() => Array(this.cols).fill(false))
+    // First Circle
+    grid[4][11] = "box on";
+    grid[4][10] = "box on";
+    grid[4][9] = "box on";
+    grid[6][7] = "box on";
+    grid[7][7] = "box on";
+    grid[8][7] = "box on";
+    grid[9][9] = "box on";
+    grid[9][10] = "box on";
+    grid[9][11] = "box on";
+    grid[8][12] = "box on";
+    grid[7][12] = "box on";
+    grid[6][12] = "box on";
+    // Second Circle 
+    grid[4][15] = "box on";
+    grid[4][16] = "box on";
+    grid[4][17] = "box on";
+    grid[6][14] = "box on";
+    grid[7][14] = "box on";
+    grid[8][14] = "box on";
+    grid[9][15] = "box on";
+    grid[9][17] = "box on";
+    grid[9][16] = "box on";
+    grid[8][19] = "box on";
+    grid[7][19] = "box on";
+    grid[6][19] = "box on";
+    // Third Circle 
+    grid[11][9] = "box on";
+    grid[11][10] = "box on";
+    grid[11][11] = "box on";
+    grid[12][7] = "box on";
+    grid[13][7] = "box on";
+    grid[14][7] = "box on";
+    grid[16][9] = "box on";
+    grid[16][10] = "box on";
+    grid[16][11] = "box on";
+    grid[14][12] = "box on";
+    grid[13][12] = "box on";
+    grid[12][12] = "box on";
+    // Fourth Circle 
+    grid[12][14] = "box on";
+    grid[13][14] = "box on";
+    grid[14][14] = "box on";
+    grid[11][15] = "box on";
+    grid[11][16] = "box on";
+    grid[11][17] = "box on";
+    grid[12][19] = "box on";
+    grid[13][19] = "box on";
+    grid[14][19] = "box on";
+    grid[16][15] = "box on";
+    grid[16][16] = "box on";
+    grid[16][17] = "box on";
+    this.setState({
+      gridFull: grid,
+      generation: 0
+    })
   }
 
   playButton = () => {
@@ -183,6 +299,16 @@ class Main extends React.Component {
     })
   }
 
+  pattern = (shape) => {
+    switch (shape) {
+      case "pulsar":
+        this.pulsar();
+      case "glider":
+        this.glider()
+    }
+
+  }
+
   gridSize = (size) => {
     switch (size) {
       case "1":
@@ -204,25 +330,29 @@ class Main extends React.Component {
   play = () => {
     // Check what grid is currently like 
     let g = this.state.gridFull;
+
     // Change grid on the clone 
     let g2 = arrayClone(this.state.gridFull)
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        let count = 0;
+        //count is how many neighbors it has that are alive
+        let count = 0
         if (i > 0) if (g[i - 1][j]) count++; // im struggling understanding why [i - 1] and then add 1 in count
-        if (j > 0) if (g[i][j - 1]) count++;
+
         if (i > 0 && j > 0) if (g[i - 1][j - 1]) count++;
-        if (i > 0 && j < this.cols - 1) if (g[i - 1][j - 1]) count++;
-        if (i < this.rows - 1) if (g[i + 1][j]) count++
+
+        if (i > 0 && j < this.cols - 1) if (g[i - 1][j + 1]) count++;
         if (j < this.cols - 1) if (g[i][j + 1]) count++;
+        if (j > 0) if (g[i][j - 1]) count++;
+        if (i < this.rows - 1) if (g[i + 1][j]) count++;
         if (i < this.rows - 1 && j > 0) if (g[i + 1][j - 1]) count++;
         if (i < this.rows - 1 && j < this.cols - 1) if (g[i + 1][j + 1]) count++;
-
         // if there are less than 2 neighbors or more than 3 the cell dies
-        if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false
-        // If the cell is dead, but gets 3 neighbors, it is born 
-        if (!g[i][j] && count === 3) g2[i][j] = true
+        if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false;
+        //     // If the cell is dead, but gets 3 neighbors, it is born 
+        if (!g[i][j] && count === 3) g2[i][j] = true;
+
       }
     }
     this.setState({
@@ -268,6 +398,10 @@ class Main extends React.Component {
             clear={this.clear}
             seed={this.seed}
             gridSize={this.gridSize}
+            pulsar={this.pulsar}
+            glider={this.glider}
+            letter={this.letter}
+
           />
           <Grid
             gridFull={this.state.gridFull}
